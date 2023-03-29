@@ -1,0 +1,31 @@
+# Server config
+server:
+  port: ${PORT:8080}
+
+# Spring config
+spring:
+  application:
+    name: product-service
+# GCP DB config
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://35.232.167.9/otaku_ma
+    username: root
+    password: msakhen#600#
+  logging:
+    level:
+      org.springframework: WARN
+      org.hibernate: WARN
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: DISCOVERY_URL:http://localhost:8761/eureka
+      #defaultZone: ${DISCOVERY_URL:http://localhost:8761}/eureka
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    leaseExpirationDurationInSeconds: 20
+
+# Ribbon config
+ribbon:
+  eureka:
+    enabled: true

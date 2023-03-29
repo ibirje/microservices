@@ -1,0 +1,115 @@
+version: "3"
+
+services:
+  # DISCOVERY SERVICE
+  discovery:
+    build:
+      context: ./discovery-service
+      dockerfile: Dockerfile
+    ports:
+      - 8761:8761
+    environment:
+      - DISCOVERY_URL=http://discovery:8761
+
+  # SERVICES
+  # 2 PRODUCT SERVICES
+  products:
+    build:
+      context: ./product-service
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      - DISCOVERY_URL=http://discovery:8761
+    links:
+      - discovery
+    depends_on:
+      - discovery
+
+#  products_two:
+#    build:
+#      context: ./product-service
+#      dockerfile: Dockerfile
+#    ports:
+#      - 9080:8080
+#    environment:
+#      - DISCOVERY_URL=http://discovery:8761
+#    links:
+#      - discovery
+#    depends_on:
+#      - discovery
+
+  # 2 CATEGORY SERVICES
+  categories:
+    build:
+      context: ./category-service
+      dockerfile: Dockerfile
+    ports:
+      - 8081:8081
+    environment:
+      - DISCOVERY_URL=http://discovery:8761
+    links:
+      - discovery
+    depends_on:
+      - discovery
+
+  # categories_two:
+    # build:
+      # context: ./category-service
+      # dockerfile: Dockerfile
+    # ports:
+      # - 9081:8081
+    # environment:
+      # - DISCOVERY_URL=http://discovery:8761
+    # links:
+      # - discovery
+    # depends_on:
+      # - discovery
+
+  # 2 THEME SERVICES
+  themes:
+    build:
+      context: ./theme-service
+      dockerfile: Dockerfile
+    ports:
+      - 8082:8082
+    environment:
+      - DISCOVERY_URL=http://discovery:8761
+    links:
+      - discovery
+    depends_on:
+      - discovery
+
+  # themes_two:
+    # build:
+      # context: ./theme-service
+      # dockerfile: Dockerfile
+    # ports:
+      # - 9082:8082
+    # environment:
+      # - DISCOVERY_URL=http://discovery:8761
+    # links:
+      # - discovery
+    # depends_on:
+      # - discovery
+
+
+  # API GATEWAY
+  gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - 8765:8765
+    environment:
+      - DISCOVERY_URL=http://discovery:8761
+    links:
+      - discovery
+      - categories
+#      - categories_two
+      - products
+#      - products_two
+      - themes
+#      - themes_two
+    depends_on:
+      - discovery
